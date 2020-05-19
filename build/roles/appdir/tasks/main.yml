@@ -1,0 +1,12 @@
+---
+# sets up the minecraft application directory
+
+- name: Create /var/mc with correct permissions
+  file:
+    path: /var/mc
+    state: directory
+    owner: mc_server
+    group: mc
+    mode: '6775'
+
+    # 6 for first digit for new files and folders to inherit gid and uid

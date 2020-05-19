@@ -1,0 +1,13 @@
+---
+# Installs speedtest
+
+- name: Add Ookla Repository
+  get_url:
+    url: "https://bintray.com/ookla/rhel/rpm"
+    dest: /etc/yum.repos.d/bintray-ookla-rhel.repo
+    mode: '0644'
+
+- name: Install speedtest
+  yum:
+    name: speedtest
+    state: latest

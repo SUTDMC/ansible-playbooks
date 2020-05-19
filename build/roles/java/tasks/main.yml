@@ -1,0 +1,9 @@
+---
+- name: Enable extras repository
+  shell: amazon-linux-extras enable java-openjdk11
+  become: true
+
+- name: Install Java
+  yum:
+    name: java-11-openjdk
+    state: latest

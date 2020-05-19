@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+    - admintools
+    - user
+    - appdir
+    - config
+    - cwagent
+    - efsutils
+    - java

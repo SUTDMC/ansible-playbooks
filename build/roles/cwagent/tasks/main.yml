@@ -1,0 +1,4 @@
+---
+- name: Download and install Cloudwatch Agent
+  yum:
+    name: https://s3.ap-southeast-1.amazonaws.com/amazoncloudwatch-agent-ap-southeast-1/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm

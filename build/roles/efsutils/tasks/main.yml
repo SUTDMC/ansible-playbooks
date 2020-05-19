@@ -1,0 +1,7 @@
+---
+# installs efsutils, needed for mounting EFS drives
+
+- name: Install efsutils
+  yum:
+    name: amazon-efs-utils
+    state: latest

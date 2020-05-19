@@ -1,0 +1,4 @@
+---
+- name: change timezone to Singapore
+  timezone:
+    name: Asia/Singapore

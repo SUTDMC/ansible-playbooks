@@ -1,0 +1,8 @@
+---
+# Installs common admin tools
+
+- name: Speedtest
+  import_tasks: speedtest.yml
+
+- name: tmux
+  import_tasks: tmux.yml

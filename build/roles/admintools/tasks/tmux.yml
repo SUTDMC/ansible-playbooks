@@ -1,0 +1,7 @@
+---
+# Installs tmux
+
+- name: Install tmux
+  yum:
+    name: tmux
+    state: latest

@@ -1,0 +1,19 @@
+---
+# Creates relevant users and groups
+
+- name: Create mc group
+  group:
+    name: mc
+    gid: 1337
+
+- name: Create mc_server user and add to group
+  user:
+    name: mc_server
+    uid: 1338
+    groups: mc
+
+- name: Add ec2-user to group
+  user:
+    name: ec2-user
+    groups: mc
+    append: yes
