@@ -1,0 +1,27 @@
+---
+# creates 4GB swap
+- name: Create swap file
+  shell:
+    cmd: dd if=/dev/zero of=/swapfile bs=128M count=32
+
+- name: Chmod 600
+  file:
+    name: /swapfile
+    mode: '0600'
+
+- name: Set up a Linux swap area
+  shell:
+    cmd: mkswap /swapfile
+
+- name: Add to swap space
+  shell:
+    cmd: swapon /swapfile
+
+- name: Verify the procedure was successful
+  shell:
+    cmd: swapon -s
+
+- name: Add to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    line: /swapfile swap swap defaults 0 0

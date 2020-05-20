@@ -1,0 +1,9 @@
+---
+
+- name: Install Boto and Boto3
+  pip:
+    name:
+      - boto
+      - boto3
+      - requests
+    state: present

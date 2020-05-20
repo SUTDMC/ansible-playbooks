@@ -10,3 +10,5 @@
     - cwagent
     - efsutils
     - java
+    - python
+    - swap
