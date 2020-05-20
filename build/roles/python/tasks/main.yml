@@ -7,3 +7,13 @@
       - boto3
       - requests
     state: present
+
+- name: Install Python3 Packages
+  pip:
+    name:
+      - boto
+      - boto3
+      - requests
+      - asyncrcon
+    state: present
+    executable: /usr/bin/pip3

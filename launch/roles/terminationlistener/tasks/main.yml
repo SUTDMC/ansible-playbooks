@@ -1,0 +1,15 @@
+---
+
+- name: Copy termination listener
+  copy:
+    src: ../files/termination_listener.py
+    dest: /home/mc_server
+  become: true
+  become_user: mc_server
+
+- name: Start termination listener
+  script:
+    cmd: ./start_termination_listener.sh
+    chdir: /home/mc_server
+  become: true
+  become_user: mc_server

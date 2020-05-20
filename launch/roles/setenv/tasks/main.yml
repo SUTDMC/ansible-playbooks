@@ -8,12 +8,14 @@
     path: /etc/environment
     regexp: '^AWS_REGION='
     line: AWS_REGION={{ ansible_ec2_placement_region }}
+  become: yes
 
 - name: Set Region (2)
   lineinfile:
     path: /etc/environment
     regexp: '^AWS_DEFAULT_REGION'
     line: AWS_DEFAULT_REGION={{ ansible_ec2_placement_region }}
+  become: yes
 
 - name: Set RAM Environment Variables
   lineinfile:
