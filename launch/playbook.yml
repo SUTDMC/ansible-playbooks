@@ -3,5 +3,6 @@
   roles:
     - {role: setenv, tags: env}
     - {role: mount_server_disk, tags: server, disk}
+    - {role: mount_map_disk, tags: server, disk}
     - {role: terminationlistener, tags: server}
     - {role: minecraft, tags: server}

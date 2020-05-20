@@ -1,0 +1,20 @@
+---
+
+- name: Attach map data disk (EBS)
+  ec2_vol_boto3:
+    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
+    instance: "{{ ansible_ec2_instance_id }}"
+    device: /dev/sdg
+    state: attached
+
+- name: Create mount point
+  file:
+    path: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+    state: directory
+    owner: mc_server
+    group: mc
+    mode: '6775'
+  become: true
+
+- name: Mount server data disk (EBS)
+  shell: mount /dev/sdf /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}
