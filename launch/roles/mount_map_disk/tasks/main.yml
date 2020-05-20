@@ -16,5 +16,5 @@
     mode: '6775'
   become: true
 
-- name: Mount server data disk (EBS)
+- name: Mount map data disk (EBS)
   shell: mount /dev/sdf /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
