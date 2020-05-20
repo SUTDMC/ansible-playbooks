@@ -1,0 +1,23 @@
+---
+
+- name: Get facts
+  ec2_metadata_facts:
+
+- name: Set Region (1)
+  lineinfile:
+    path: /etc/environment
+    regexp: '^AWS_REGION='
+    line: AWS_REGION={{ ansible_ec2_placement_region }}
+
+- name: Set Region (2)
+  lineinfile:
+    path: /etc/environment
+    regexp: '^AWS_DEFAULT_REGION'
+    line: AWS_DEFAULT_REGION={{ ansible_ec2_placement_region }}
+
+- name: Set RAM Environment Variables
+  lineinfile:
+    path: /etc/environment
+    regexp: '^MC_RAM='
+    line: MC_RAM={{ ansible_memtotal_mb * 0.9 | int }}
+  become: yes

@@ -1,0 +1,10 @@
+---
+
+- name: Start the Server
+  shell:
+    chdir: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}
+    cmd: |
+      tmux -S tmux.sock new-session -s server -d
+      tmux -S tmux.sock send-keys -t server "./LaunchServer.sh" ENTER
+  become: yes
+  become_user: mc_server
