@@ -37,6 +37,8 @@ async def check():
             await asyncio.sleep(1)
             await rcon.command("wb fill pause")
             await rcon.command("stop")
+
+            os.system('cd /var/ansible && ansible-playbook shutdown/playbook.yml --tags "disk" -i hosts_py3')
             return
 
 

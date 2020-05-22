@@ -1,6 +1,6 @@
 ---
 
-- name: Start the Server
+- name: Start the server
   shell:
     chdir: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}
     cmd: |
@@ -8,3 +8,9 @@
       tmux -S tmux.sock send-keys -t server "./LaunchServer.sh" ENTER
   become: yes
   become_user: mc_server
+
+- name: Wait for server to finish launching
+  wait_for:
+    host: 0.0.0.0
+    port: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.ansible.wait_for_port', region='ap-southeast-1') }}"
+    delay: 10

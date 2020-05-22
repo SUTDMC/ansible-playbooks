@@ -1,0 +1,6 @@
+---
+
+- name: Kill terminationlistener if it is still running
+  shell:
+    cmd: tmux -S tmux.sock kill-server || if [[ $(lsof tmux.sock | wc -c) -ne 0 ]]; then ...; fi
+    chdir: /home/ec2-user

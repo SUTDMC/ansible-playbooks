@@ -1,0 +1,8 @@
+---
+
+- name: Attach Network Interface
+  ec2_eni_boto3:
+    instance: "{{ ansible_ec2_instance_id }}"
+    eni: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.eni_id', region='ap-southeast-1') }}"
+    index: 1
+    state: attached

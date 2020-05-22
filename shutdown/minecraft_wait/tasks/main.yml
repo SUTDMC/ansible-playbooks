@@ -1,0 +1,16 @@
+---
+# The server can take quite some time to shut down
+# Keeps checking if the java process still has any files open in the directory
+- name: Wait for server to completely exit
+  shell:
+    cmd: lsof -u mc_server /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }} | grep java | wc -l
+  register: result
+  until: result.stdout.strip() == "0"
+  retries: 120
+  delay: 1
+  become: yes
+
+- name: Destroy the tmux server if it is running
+  shell:
+    cmd: tmux -S /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}/tmux.sock kill-server || if [[ $(lsof /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}/tmux.sock | wc -c) -ne 0 ]]; then ...; fi
+  become: true

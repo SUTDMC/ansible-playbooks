@@ -1,8 +1,16 @@
 ---
 - hosts: all
+
+  pre_tasks:
+    - name: Get facts
+      ec2_metadata_facts:
+      tags: always
+
   roles:
     - {role: setenv, tags: env}
-    - {role: mount_server_disk, tags: server, disk}
-    - {role: mount_map_disk, tags: server, disk}
+    - {role: cwagent, tags: env}
+    - {role: mount_server_disk, tags: disk}
+    - {role: mount_map_disk, tags: disk}
     - {role: terminationlistener, tags: server}
     - {role: minecraft, tags: server}
+    - {role: eni, tags: network}

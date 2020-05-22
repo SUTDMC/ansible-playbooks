@@ -7,6 +7,14 @@
     device: /dev/sdg
     state: attached
 
+- name: Wait for volume to be available
+  shell: file /dev/sdg -b | grep -q 'symbolic link'
+  register: result
+  until: result.rc == 0
+  retries: 10
+  delay: 1
+  ignore_errors: yes
+
 - name: Create mount point
   file:
     path: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
@@ -17,4 +25,8 @@
   become: true
 
 - name: Mount map data disk (EBS)
-  shell: mount /dev/sdf /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+  shell: mount /dev/sdg /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+  become: true
+#
+#- debug:
+#    msg: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"

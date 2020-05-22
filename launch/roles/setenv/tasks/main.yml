@@ -1,8 +1,4 @@
 ---
-
-- name: Get facts
-  ec2_metadata_facts:
-
 - name: Set Region (1)
   lineinfile:
     path: /etc/environment
@@ -21,5 +17,8 @@
   lineinfile:
     path: /etc/environment
     regexp: '^MC_RAM='
-    line: MC_RAM={{ ansible_memtotal_mb * 0.9 | int }}
+    line: MC_RAM={{ ansible_memtotal_mb * 0.9 | round | int }}
   become: yes
+
+- debug:
+    msg: "{{ ansible_memtotal_mb * 0.9 | round | int }}"

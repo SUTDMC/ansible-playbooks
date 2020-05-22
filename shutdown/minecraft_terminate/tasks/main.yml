@@ -1,0 +1,9 @@
+---
+
+- name: Send stop command to minecraft server
+  shell:
+    chdir: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}
+    cmd: tmux -S tmux.sock send-keys -t server "stop" ENTER
+  become: yes
+  become_user: mc_server
+

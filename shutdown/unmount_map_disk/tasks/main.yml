@@ -1,0 +1,21 @@
+---
+- name: Unmount map data disk (EBS)
+  shell: umount /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+  become: true
+
+- name: Remove mount point
+  file:
+    path: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+    owner: mc_server
+    group: mc
+    mode: '6775'
+    state: absent
+  become: true
+
+- name: Detach map data disk (EBS)
+  ec2_vol_boto3:
+    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
+    instance: "{{ ansible_ec2_instance_id }}"
+    device: /dev/sdg
+    state: detached
+

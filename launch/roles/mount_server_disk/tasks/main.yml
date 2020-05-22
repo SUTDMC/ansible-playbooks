@@ -1,6 +1,4 @@
 ---
-- name: Get facts
-  ec2_metadata_facts:
 
 - name: Attach server data disk
   ec2_vol_boto3:
@@ -8,6 +6,14 @@
     instance: "{{ ansible_ec2_instance_id }}"
     device: /dev/sdf
     state: attached
+
+- name: Wait for volume to be available
+  shell: file /dev/sdf -b | grep -q 'symbolic link'
+  register: result
+  until: result.rc == 0
+  retries: 10
+  delay: 1
+  ignore_errors: yes
 
 - name: Create mount point
   file:
@@ -21,3 +27,10 @@
 - name: Mount server data disk
   shell: mount /dev/sdf /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}
   become: true
+
+#- debug:
+#    msg: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.data.ebs.vol_id', region='ap-southeast-1') }}"
+#
+#- name: Hold up
+#  pause:
+#    seconds: 10

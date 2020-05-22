@@ -1,0 +1,25 @@
+---
+- hosts: all
+
+  pre_tasks:
+    - name: Get facts
+      ec2_metadata_facts:
+      tags: always
+
+  roles:
+    - role: terminationlistener
+      tags: server
+    - role: minecraft_terminate
+      tags: server
+    - role: minecraft_wait
+      tags:
+        - server
+        - disk
+    - role: eni
+      tags: network
+    - role: cwagent
+      tags: disk
+    - role: unmount_server_disk
+      tags: disk
+    - role: unmount_map_disk
+      tags: disk

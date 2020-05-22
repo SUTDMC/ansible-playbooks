@@ -152,17 +152,23 @@ def run_module():
 
         result["changed"] = True
 
-        def find_attachment(client, volume, instance):
+        def find_attachment(client, volume, instance, can_return_none=False):
             def curry():
                 attachments = client.describe_volumes(VolumeIds=[volume])["Volumes"][0]["Attachments"]
-                return next(filter(lambda a: a["InstanceId"] == instance, attachments))
+                if can_return_none:
+                    return next(filter(lambda a: a["InstanceId"] == instance, attachments), None)
+                else:
+                    return next(filter(lambda a: a["InstanceId"] == instance, attachments), dict())
 
             return curry
 
-        while find_attachment(client=ec2_client, volume=module.params["vol"], instance=module.params["instance"])()[
-            "State"] != module.params["state"]:
-            time.sleep(0.25)
-
+        if module.params["state"] == "attached":
+            while find_attachment(client=ec2_client, volume=module.params["vol"], instance=module.params["instance"])().get("State") != module.params["state"]:
+                time.sleep(0.25)
+        elif module.params["state"] == "detached":
+            while find_attachment(client=ec2_client, volume=module.params["vol"], instance=module.params["instance"],
+                                  can_return_none=True)() is not None:
+                time.sleep(0.25)
         module.exit_json(**result)
         return
 
