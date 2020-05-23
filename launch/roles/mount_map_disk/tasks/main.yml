@@ -6,6 +6,9 @@
     instance: "{{ ansible_ec2_instance_id }}"
     device: /dev/sdg
     state: attached
+  register: result
+  until: result.volume.Attachments | length > 0 and result.volume.Attachments[0].InstanceId == ansible_ec2_instance_id and result.volume.Attachments[0].State == "attached"
+  retries: 10
 
 - name: Wait for volume to be available
   shell: file /dev/sdg -b | grep -q 'symbolic link'

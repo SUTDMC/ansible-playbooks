@@ -116,6 +116,7 @@ def run_module():
             module.fail_json(msg="No such volume found", **result)
 
         volume = volumes[0]
+        result["volume"] = volume
         instance_already_holds_volume = False
         for attachment in volume["Attachments"]:
             if module.params["state"] == "attached":
@@ -169,6 +170,7 @@ def run_module():
             while find_attachment(client=ec2_client, volume=module.params["vol"], instance=module.params["instance"],
                                   can_return_none=True)() is not None:
                 time.sleep(0.25)
+        result["volume"] = volume
         module.exit_json(**result)
         return
 

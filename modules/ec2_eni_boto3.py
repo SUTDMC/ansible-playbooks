@@ -115,7 +115,7 @@ def run_module():
             return
 
         interface = interfaces["NetworkInterfaces"][0]
-
+        result["interface"] = interface
         if module.params["state"] == "attached" and interface.get("Attachment", dict()).get("InstanceId") == \
                 module.params["instance"]:
             # nothing changed
@@ -141,7 +141,7 @@ def run_module():
         else:
             module.fail_json(msg="Expected 'attached' or 'detached' for state", **result)
             return
-
+        result["interface"] = interface
         result["changed"] = True
         module.exit_json(**result)
         return
