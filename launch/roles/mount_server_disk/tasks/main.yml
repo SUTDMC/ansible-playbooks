@@ -1,14 +1,11 @@
 ---
 
 - name: Attach server data disk
-  ec2_vol_boto3:
-    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.data.ebs.vol_id', region='ap-southeast-1') }}"
+  ec2_vol:
+    id: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.data.ebs.vol_id', region='ap-southeast-1') }}"
     instance: "{{ ansible_ec2_instance_id }}"
-    device: /dev/sdf
-    state: attached
-  register: result
-  until: result.volume.Attachments | length > 0 and result.volume.Attachments[0].InstanceId == ansible_ec2_instance_id and result.volume.Attachments[0].State == "attached"
-  retries: 10
+    device_name: /dev/sdf
+    state: present
 
 - name: Wait for volume to be available
   shell: file /dev/sdf -b | grep -q 'symbolic link'

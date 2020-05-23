@@ -1,14 +1,11 @@
 ---
 
 - name: Attach map data disk (EBS)
-  ec2_vol_boto3:
-    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
+  ec2_vol:
+    id: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
     instance: "{{ ansible_ec2_instance_id }}"
-    device: /dev/sdg
-    state: attached
-  register: result
-  until: result.volume.Attachments | length > 0 and result.volume.Attachments[0].InstanceId == ansible_ec2_instance_id and result.volume.Attachments[0].State == "attached"
-  retries: 10
+    device_name: /dev/sdg
+    state: present
 
 - name: Wait for volume to be available (EBS)
   shell: file /dev/sdg -b | grep -q 'symbolic link'
@@ -30,6 +27,3 @@
 - name: Mount map data disk (EBS)
   shell: mount /dev/sdg /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
   become: true
-#
-#- debug:
-#    msg: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"

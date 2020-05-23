@@ -10,5 +10,5 @@
   become: true
 
 - name: Mount map data disk (EFS)
-  shell: mount {{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.fs_id', region='ap-southeast-1') }}:{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.mount_root', region='ap-southeast-1')  }} /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+  shell: mount -t efs {{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.fs_id', region='ap-southeast-1') }}:{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.mount_root', region='ap-southeast-1')  }} /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
   become: true

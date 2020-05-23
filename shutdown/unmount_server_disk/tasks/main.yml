@@ -10,11 +10,9 @@
   become: true
 
 - name: Detach server data disk
-  ec2_vol_boto3:
-    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.data.ebs.vol_id', region='ap-southeast-1') }}"
-    instance: "{{ ansible_ec2_instance_id }}"
-    device: /dev/sdf
-    state: detached
+  ec2_vol:
+    id: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.data.ebs.vol_id', region='ap-southeast-1') }}"
+    instance: None
 
 
 
