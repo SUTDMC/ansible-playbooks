@@ -1,5 +1,5 @@
 ---
-- name: Unmount map data disk (EBS)
+- name: Unmount map data disk
   shell: umount /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
   become: true
 
@@ -18,4 +18,4 @@
     instance: "{{ ansible_ec2_instance_id }}"
     device: /dev/sdg
     state: detached
-
+  when: not use_ebs

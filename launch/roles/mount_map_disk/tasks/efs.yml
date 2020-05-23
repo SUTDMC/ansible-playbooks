@@ -1,0 +1,14 @@
+---
+
+- name: Create mount point (EFS)
+  file:
+    path: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+    state: directory
+    owner: mc_server
+    group: mc
+    mode: '6775'
+  become: true
+
+- name: Mount map data disk (EFS)
+  shell: mount {{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.fs_id', region='ap-southeast-1') }}:{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.efs.mount_root', region='ap-southeast-1')  }} /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
+  become: true

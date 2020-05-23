@@ -1,6 +1,7 @@
 ---
 - hosts: all
-
+  vars:
+    use_efs: "{{ lookup('env', 'MC_USE_EFS') | bool or false }}"
   pre_tasks:
     - name: Get facts
       ec2_metadata_facts:

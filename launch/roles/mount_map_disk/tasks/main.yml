@@ -1,35 +1,9 @@
 ---
 
-- name: Attach map data disk (EBS)
-  ec2_vol_boto3:
-    vol: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
-    instance: "{{ ansible_ec2_instance_id }}"
-    device: /dev/sdg
-    state: attached
-  register: result
-  until: result.volume.Attachments | length > 0 and result.volume.Attachments[0].InstanceId == ansible_ec2_instance_id and result.volume.Attachments[0].State == "attached"
-  retries: 10
+- name: Attach Map Disk (EFS)
+  include_tasks: efs.yml
+  when: use_efs
 
-- name: Wait for volume to be available
-  shell: file /dev/sdg -b | grep -q 'symbolic link'
-  register: result
-  until: result.rc == 0
-  retries: 10
-  delay: 1
-  ignore_errors: yes
-
-- name: Create mount point
-  file:
-    path: /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
-    state: directory
-    owner: mc_server
-    group: mc
-    mode: '6775'
-  become: true
-
-- name: Mount map data disk (EBS)
-  shell: mount /dev/sdg /var/mc/{{ lookup('env', 'MC_SERVER_NAME') }}_map
-  become: true
-#
-#- debug:
-#    msg: "{{ lookup('aws_ssm', lookup('env', 'MC_SERVER_NAME') ~ '.dynmap.ebs.vol_id', region='ap-southeast-1') }}"
+- name: Detach Map Disk (EFS)
+  include_tasks: ebs.yml
+  when: not use_efs
