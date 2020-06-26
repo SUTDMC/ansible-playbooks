@@ -3,6 +3,7 @@
   become: true
 
   roles:
+    - python
     - admintools
     - user
     - appdir
@@ -10,5 +11,4 @@
     - cwagent
     - efsutils
     - java
-    - python
     - swap

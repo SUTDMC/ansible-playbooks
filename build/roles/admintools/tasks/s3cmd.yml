@@ -1,0 +1,7 @@
+---
+# Installs the s3cmd CLI tool
+- name: s3cmd
+  pip:
+    name: s3cmd
+    state: present
+    executable: /usr/bin/pip3
